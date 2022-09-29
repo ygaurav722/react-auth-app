@@ -12,7 +12,7 @@ export const signUpRoute = {
         const user = await db.collection('users').findOne({ email });
 
         if (user) {
-            res.sendStatus(409);
+            res.status(409).json({"meassage":"user already exist"});
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
@@ -39,7 +39,7 @@ export const signUpRoute = {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: '2d',
+            expiresIn: '1d',
         },
         (err, token) => {
             if (err) {

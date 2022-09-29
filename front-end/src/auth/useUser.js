@@ -4,21 +4,21 @@ import { useToken } from './useToken';
 export const useUser = () => {
     const [token] = useToken();
 
-    const getPayloadFromToken = token => {
+    const getPayload = token => {
         const encodedPayload = token.split('.')[1];
         return JSON.parse(atob(encodedPayload));
     }
 
     const [user, setUser] = useState(() => {
         if (!token) return null;
-        return getPayloadFromToken(token);
+        return getPayload(token);
     });
 
     useEffect(() => {
         if (!token) {
             setUser(null);
         } else {
-            setUser(getPayloadFromToken(token));
+            setUser(getPayload(token));
         }
     }, [token]);
 
