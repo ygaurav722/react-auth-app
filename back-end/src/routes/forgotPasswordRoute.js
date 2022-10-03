@@ -18,7 +18,7 @@ export const forgotPasswordRoute = {
             try {
                 await sendEmail({
                     to: email,
-                    from: 'shaun.linkedin.learning@gmail.com',
+                    from: 'gauravyadavsmartboys@gmail.com',
                     subject: 'Password Reset',
                     text: `
                         To reset your password, click this link:
