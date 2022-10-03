@@ -11,14 +11,14 @@ export const logInRoute = {
         const db = getDbConnection('react-auth-db');
         const user = await db.collection('users').findOne({ email });
 
-        if (!user) return res.status(401).json({"message":"email is not present"});
+        if (!user) return res.sendStatus(401);
 
         const { _id: id, isVerified, passwordHash, info } = user;
 
         const isCorrect = await bcrypt.compare(password, passwordHash);
 
         if (isCorrect) {
-            jwt.sign({ id, isVerified, email, info }, process.env.JWT_SECRET, { expiresIn: '1d' }, (err, token) => {
+            jwt.sign({ id, isVerified, email, info }, process.env.JWT_SECRET, { expiresIn: '2d' }, (err, token) => {
                 if (err) {
                     res.status(500).json(err);
                 }

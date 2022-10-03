@@ -21,7 +21,7 @@ export const SignUpPage = () => {
         });
         const { token } = response.data;
         setToken(token);
-        history.push('/');
+        history.push('/please-verify');
     }
 
     return (
@@ -41,7 +41,7 @@ export const SignUpPage = () => {
                 type="password"
                 value={confirmPasswordValue}
                 onChange={e => setConfirmPasswordValue(e.target.value)}
-                placeholder="confirm password" />
+                placeholder="password" />
             <hr />
             <button
                 disabled={

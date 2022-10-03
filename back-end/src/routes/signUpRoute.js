@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { v4 as uuid } from 'uuid';
 import { getDbConnection } from '../db';
+import { sendEmail } from '../util/sendEmail';
 
 export const signUpRoute = {
     path: '/api/signup',
@@ -12,10 +14,12 @@ export const signUpRoute = {
         const user = await db.collection('users').findOne({ email });
 
         if (user) {
-            res.status(409).json({"meassage":"user already exist"});
+            res.sendStatus(409);
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
+
+        const verificationString = uuid();
 
         const startingInfo = {
             hairColor: '',
@@ -28,8 +32,24 @@ export const signUpRoute = {
             passwordHash,
             info: startingInfo,
             isVerified: false,
+            verificationString,
         });
         const { insertedId } = result;
+
+        try {
+            await sendEmail({
+                to: email,
+                from: 'shaun.linkedin.learning@gmail.com',
+                subject: 'Please verify your email',
+                text: `
+                    Thanks for signing up! To verify your email, click here:
+                    http://localhost:3000/verify-email/${verificationString}
+                `,
+            });
+        } catch (e) {
+            console.log(e);
+            res.sendStatus(500);
+        }
 
         jwt.sign({
             id: insertedId,
@@ -39,7 +59,7 @@ export const signUpRoute = {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: '1d',
+            expiresIn: '2d',
         },
         (err, token) => {
             if (err) {

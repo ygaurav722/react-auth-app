@@ -4,8 +4,10 @@ import axios from 'axios';
 import { useToken } from '../auth/useToken';
 
 export const LogInPage = () => {
-    const [errorMessage, setErrorMessage] = useState('');
     const [token, setToken] = useToken();
+
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
 

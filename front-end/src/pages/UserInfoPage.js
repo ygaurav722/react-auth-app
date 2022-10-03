@@ -8,17 +8,27 @@ export const UserInfoPage = () => {
     const user = useUser();
     const [token, setToken] = useToken();
 
-    const { id, email, info } = user;
+    const { id, email, isVerified, info } = user;
+
+    // We'll use the history to navigate the user
+    // programmatically later on (we're not using it yet)
     const history = useHistory();
 
+    // These states are bound to the values of the text inputs
+    // on the page (see JSX below). 
     const [favoriteFood, setFavoriteFood] = useState(info.favoriteFood || '');
     const [hairColor, setHairColor] = useState(info.hairColor || '');
     const [bio, setBio] = useState(info.bio || '');
 
+    // These state variables control whether or not we show
+    // the success and error message sections after making
+    // a network request (see JSX below).
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-
+    // This useEffect hook automatically hides the
+    // success and error messages after 3 seconds when they're shown.
+    // Just a little user interface improvement.
     useEffect(() => {
         if (showSuccessMessage || showErrorMessage) {
             setTimeout(() => {
@@ -47,9 +57,8 @@ export const UserInfoPage = () => {
     }
 
     const logOut = () => {
-        // We'll want to log the user out here
-        // and send them to the "login page"
-        alert('Log out functionality not implemented yet');
+        localStorage.removeItem('token');
+        history.push('/login');
     }
     
     const resetValues = () => {
@@ -57,10 +66,12 @@ export const UserInfoPage = () => {
         setHairColor(info.hairColor);
         setBio(info.bio);
     }
-
+    
+    // And here we have the JSX for our component. It's pretty straightforward
     return (
         <div className="content-container">
             <h1>Info for {email}</h1>
+            {!isVerified && <div className="fail">You won't be able to make any changes until you verify your email</div>}
             {showSuccessMessage && <div className="success">Successfully saved user data!</div>}
             {showErrorMessage && <div className="fail">Uh oh... something went wrong and we couldn't save changes</div>}
             <label>
