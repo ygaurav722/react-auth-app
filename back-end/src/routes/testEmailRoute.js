@@ -6,7 +6,7 @@ export const testEmailRoute = {
     handler: async (req, res) => {
         try {
             await sendEmail({
-                to: 'gauravyadavsmartboys+test1@gmail.com',
+                to: 'gauravyadavsmartboys@gmail.com',
                 from: 'gauravyadavsmartboys@gmail.com',
                 subject: 'Does this work?',
                 text: 'If you\'re reading this... yes!',

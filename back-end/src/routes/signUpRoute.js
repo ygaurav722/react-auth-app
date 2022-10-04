@@ -14,7 +14,7 @@ export const signUpRoute = {
         const user = await db.collection('users').findOne({ email });
 
         if (user) {
-            res.sendStatus(409);
+            return res.sendStatus(409);
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
@@ -65,7 +65,7 @@ export const signUpRoute = {
             if (err) {
                 return res.status(500).send(err);
             }
-            res.status(200).json({ token });
+            return  res.status(200).json({ token });
         });
     }
 }
